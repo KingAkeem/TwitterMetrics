@@ -1,0 +1,113 @@
+* {
+	font-family: fantasy, Georgia, 'Times New Roman', Times, serif
+}
+
+input[type=text] {
+	width: 50%;
+}
+input.rounded {
+	/*
+	 Rounded corners: https://electrictoolbox.com/css3-rounded-corner-input/
+	 */
+	border: 1px solid #ccc;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	-moz-box-shadow: 2px 2px 3px #666;
+	-webkit-box-shadow: 2px 2px 3px #666;
+	box-shadow: 2px 2px 3px #666;
+	font-size: 20px;
+	padding: 4px 7px;
+	outline: 0;
+	-webkit-appearance: none;
+	margin-bottom: 1em;
+}
+input.rounded:focus {
+	border-color: #55acee;
+}
+label {
+	font-size: 20px;
+}
+
+
+#tweets {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#tweets td, #tweets th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#tweets tr:nth-child(even){background-color: #f2f2f2;}
+
+#tweets tr:hover {background-color: #ddd;}
+
+#tweets th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #55acee;
+  color: white;
+}
+
+/* The side navigation menu */
+.sidenav {
+	height: 100%; /* 100% Full-height */
+	width: 250px; /* 0 width - change this with JavaScript */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Stay on top */
+	top: 0; /* Stay at the top */
+	left: 0;
+	background-color: #111; /* Black*/
+	overflow-x: hidden; /* Disable horizontal scroll */
+	padding-top: 60px; /* Place content 60px from the top */
+	transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	font-size: 25px;
+	color: #818181;
+	display: block;
+	transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+	color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+}
+
+.container {
+	margin-left: 250px;
+	padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+	.sidenav {padding-top: 15px;}
+	.sidenav a {font-size: 18px;}
+}
+
+
+#submit {
+	background-color: #55acee;
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	font-size: 16px;
+	border-radius: 2px;
+}

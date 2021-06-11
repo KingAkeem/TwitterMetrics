@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>Twitter Metrics - {% block title %}{% endblock %}</title> 
+    {% endblock %}
+</head>
+
+<body>
+  <div id='navigation-bar' class='sidenav'>
+    <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
+    <a id='main-menu-item' href="/">Home</a>
+    <a id='tweet-menu-item' href="/tweets">Search Tweets</a>
+  </div>
+  <div id="content">{% block content %}{% endblock %}</div>
+</body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write(`<script src="{{
+  url_for('static', filename='jquery.js') }}">\x3C/script>`)</script>
+<script type=text/javascript>
+  // setting script root global to determine the location of the project roo
+  $SCRIPT_ROOT = {{ request.script_root|tojson }};
+</script>
+{% block scripts %}{% endblock %}
+</html>

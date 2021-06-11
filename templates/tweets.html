@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Tweets{% endblock %}
+{% block head %}
+	{{ super() }}
+  <style type="text/css">
+    #tweet-menu-item {
+      color: #ddd;
+      border: 1px solid #ddd;
+      background-color: #55acee;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <label for='username'>Username:</label>
+    <input class='rounded' type='text' id='username' name='username'/><br>
+    <label for='filter'>Filter Tweets:</label>
+    <input class='rounded' type='text' id='filter' name='filter'/><br>
+    <label for='limit'>Tweet Limit:</label>
+    <input class='rounded' type="number" id="limit" name='limit' value='20' step='20' min='20'/><br>
+    <input id='submit' type="submit" value='Submit'/>
+    <div id='table-container'></div>
+  </div>
+ {% endblock %}
+
+ {% block scripts %}
+ <script>
+   $('#submit').bind('click', function(event) {
+     const params = {username: $('#username').val(), limit: $('#limit').val(), filter: $('#filter').val()};
+     $.getJSON($SCRIPT_ROOT + '/search/tweets', params, function(tweets) {
+       const tweetTable = $("<table id='tweets'>");
+       $('#table-container').empty();
+       $('#table-container').append(tweetTable);
+
+       header = $('<tr>');
+       header.append(`<th>ID</th>`);
+       header.append(`<th>Tweet</th>`);
+       tweetTable.append(header);
+
+       for (let i = 0; i < tweets.length; i++) {
+          const tweet = tweets[i];
+          const row = $(`<tr id=${tweet.id}>`);
+          row.append(`<td>${tweet.id}</td>`);
+          row.append(`<td>${tweet.content}</td>`);
+          tweetTable.append(row);
+       }
+     });
+   })
+ </script>
+ {% endblock %}
