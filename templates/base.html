@@ -11,11 +11,14 @@
   <div id='navigation-bar' class='sidenav'>
     <a href="javascript:void(0)" class="closebtn" id="closebtn">&times;</a>
     <a id='main-menu-item' href="/">Home</a>
-    <a id='tweet-menu-item' href="/tweets">Search Tweets</a>
+    <a id='tweet-menu-item' href="/tweets">Tweets</a>
+    <a id='user-menu-item' href="/user">User</a>
   </div>
   <div id="content">{% block content %}{% endblock %}</div>
 </body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 <script>window.jQuery || document.write(`<script src="{{
   url_for('static', filename='jquery.js') }}">\x3C/script>`)</script>
 <script type=text/javascript>

@@ -20,12 +20,51 @@
     <label for='limit'>Tweet Limit:</label>
     <input class='rounded' type="number" id="limit" name='limit' value='20' step='20' min='20'/><br>
     <input id='submit' type="submit" value='Submit'/>
+    <input id='export' type="button" value="Export Results"/>
     <div id='table-container'></div>
   </div>
  {% endblock %}
 
  {% block scripts %}
- <script>
+ <script type="module">
+   $('#export').hide();
+   $('#export').bind('click', function(event) {
+     const table = $('#table-container').children()[0];
+     if (table) {
+       const doc = new window.jspdf.jsPDF();
+       doc.html(table, {
+         html2canvas: {
+           useCORS: true,
+           allowTaint: true
+         },
+         callback: function(doc) {
+           doc.save();
+         }
+       });
+       console.log(doc);
+      /*
+      sends data back to server
+
+      const rows =[];
+      const data = new FormData();
+      for (let i = 0; i < table.rows.length; i++) {
+        const row = table.rows[i];
+        const rowData = {};
+        for (let j = 0; j < row.children.length; j++) {
+            const cell = row.children[j];
+            rowData[cell.id] = cell.innerText;   
+        }
+        rows.push(rowData);
+      }
+
+      data.append('rows', JSON.stringify(rows));
+      const request = new XMLHttpRequest();
+      request.open('POST', '/export/pdf')
+      request.send(data);
+      */
+     }
+   });
+
    $('#submit').bind('click', function(event) {
      const params = {username: $('#username').val(), limit: $('#limit').val(), filter: $('#filter').val()};
      $.getJSON($SCRIPT_ROOT + '/search/tweets', params, function(tweets) {
@@ -33,7 +72,7 @@
        $('#table-container').empty();
        $('#table-container').append(tweetTable);
 
-       header = $('<tr>');
+       const header = $('<tr>');
        header.append(`<th>ID</th>`);
        header.append(`<th>Tweet</th>`);
        tweetTable.append(header);
@@ -41,10 +80,12 @@
        for (let i = 0; i < tweets.length; i++) {
           const tweet = tweets[i];
           const row = $(`<tr id=${tweet.id}>`);
-          row.append(`<td>${tweet.id}</td>`);
-          row.append(`<td>${tweet.content}</td>`);
+          row.append(`<td id='id'>${tweet.id}</td>`);
+          row.append(`<td id='content'>${tweet.content}</td>`);
           tweetTable.append(row);
        }
+
+       $('#export').show();
      });
    })
  </script>
