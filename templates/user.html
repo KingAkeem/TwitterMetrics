@@ -15,14 +15,14 @@
   <div class="container">
     <label for='username'>Username:</label>
     <input class='rounded' type='text' id='username' name='username'/><br>
-    <input id='submit' type="submit" value='Submit'/>
+    <input id='submit-button' class='action-button' type="submit" value='Submit'/>
     <div id='table-container'></div>
   </div>
  {% endblock %}
 
  {% block scripts %}
  <script>
-   $('#submit').bind('click', function(event) {
+   $('#submit-button').bind('click', function(event) {
      const params = {username: $('#username').val(), limit: $('#limit').val(), filter: $('#filter').val()};
      $.getJSON($SCRIPT_ROOT + '/search/user', params, function(user) {
        const userTable = $("<table id='users'>");
