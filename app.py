@@ -59,18 +59,16 @@ def followers():
 	return render_template('user.html')
 
 
-def create_csv(name, rows):
+def create_csv(name, rows, fields):
 	filename = f'{name}.csv'
+	print(fields)
 	with open(filename, 'w+') as csvfile:
-		csvwriter = csv.DictWriter(csvfile, fieldnames=['ID', 'Tweets'])
+		csvwriter = csv.DictWriter(csvfile, fieldnames=fields)
 		csvwriter.writeheader()
 		for row in rows:
 			try:
-				csvwriter.writerow({
-					'ID': row['id'],
-					'Tweets': row['content']
-				})
-			except KeyError as e:
+				csvwriter.writerow(row)
+			except (KeyError, ValueError) as e:
 				print(f'Found invalid row. {e}')
 		return filename 
 
@@ -80,9 +78,10 @@ def create_csv(name, rows):
 def export(file_type):
 	username = escape(request.args.get('username', '', type=str))
 	rows = json.loads(request.form.get('rows'))
+	fields = json.loads(request.form.get('fields'))
 
 	if file_type == 'csv':
-		filename = create_csv(username, rows)
+		filename = create_csv(username, rows, fields)
 		with open(filename, 'rb') as csv_file:
 			response = make_response(csv_file.read())
 			response.status = 200

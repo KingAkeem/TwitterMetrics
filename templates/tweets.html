@@ -108,6 +108,7 @@
 
         const request = new XMLHttpRequest();
         request.open('POST', `/export/csv?username=${username}`);
+        data.append('fields', JSON.stringify(['id', 'content']));
         data.append('rows', JSON.stringify(rows));
         request.onreadystatechange = function() {
           if (request.readyState === XMLHttpRequest.DONE) {
@@ -133,7 +134,7 @@
    $('#submit-button').bind('click', function(event) {
      const params = {username: $('#username').val(), limit: $('#limit').val(), filter: $('#filter').val()};
      $.getJSON($SCRIPT_ROOT + '/search/tweets', params, function(tweets) {
-       const tweetTable = $("<table id='tweets'>");
+       const tweetTable = $("<table class='result-table'>");
        $('#table-container').empty();
        $('#table-container').append(tweetTable);
 

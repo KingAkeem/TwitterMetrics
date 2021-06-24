@@ -29,22 +29,22 @@ label {
 	font-size: 20px;
 }
 
-#tweets {
+.result-table {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-#tweets td, #tweets th {
+.result-table td, .result-table th {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-#tweets tr:nth-child(even){background-color: #f2f2f2;}
+.result-table tr:nth-child(even){background-color: #f2f2f2;}
 
-#tweets tr:hover {background-color: #ddd;}
+.result-table tr:hover {background-color: #ddd;}
 
-#tweets th {
+.result-table th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
