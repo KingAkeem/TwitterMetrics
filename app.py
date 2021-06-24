@@ -1,10 +1,8 @@
-import csv
-
-from flask import json
-from flask.json import jsonify
+from flask import json, render_template, Flask, request 
 from markupsafe import escape
-from flask import render_template, Flask, request, Response, make_response
-from twint import run, Config 
+from twint import run, Config
+
+from lib.file import make_csv_response
 
 def marshal_tweet(tweet):
 	return {
@@ -58,22 +56,6 @@ def tweets():
 def followers():
 	return render_template('user.html')
 
-
-def create_csv(name, rows, fields):
-	filename = f'{name}.csv'
-	print(fields)
-	with open(filename, 'w+') as csvfile:
-		csvwriter = csv.DictWriter(csvfile, fieldnames=fields)
-		csvwriter.writeheader()
-		for row in rows:
-			try:
-				csvwriter.writerow(row)
-			except (KeyError, ValueError) as e:
-				print(f'Found invalid row. {e}')
-		return filename 
-
-
-
 @app.route("/export/<file_type>", methods=['post'])
 def export(file_type):
 	username = escape(request.args.get('username', '', type=str))
@@ -81,13 +63,7 @@ def export(file_type):
 	fields = json.loads(request.form.get('fields'))
 
 	if file_type == 'csv':
-		filename = create_csv(username, rows, fields)
-		with open(filename, 'rb') as csv_file:
-			response = make_response(csv_file.read())
-			response.status = 200
-			response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-			response.headers["Content-type"] = "text/csv"
-			return response
+		return make_csv_response(username, rows, fields)
 
 @app.route("/search/tweets")
 def get_tweets():
@@ -95,10 +71,10 @@ def get_tweets():
 	limit = escape(request.args.get('limit', '', type=str))
 	filter = escape(request.args.get('filter', '', type=str))
 	tweets = grab_tweets(username=username, limit=limit, filter=filter)
-	return jsonify(tweets)
+	return json.jsonify(tweets)
 
 @app.route("/search/user")
 def get_user():
 	username = escape(request.args.get('username', '', type=str))
 	users = grab_user(username=username)
-	return jsonify(users)
+	return json.jsonify(users)
