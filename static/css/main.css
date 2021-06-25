@@ -16,7 +16,7 @@ input.rounded {
 	-moz-box-shadow: 2px 2px 3px #666;
 	-webkit-box-shadow: 2px 2px 3px #666;
 	box-shadow: 2px 2px 3px #666;
-	font-size: 20px;
+	font-size: 16px;
 	padding: 4px 7px;
 	outline: 0;
 	-webkit-appearance: none;
@@ -26,7 +26,7 @@ input.rounded:focus {
 	border-color: #55acee;
 }
 label {
-	font-size: 20px;
+	font-size: 16px;
 }
 
 .result-table {
@@ -70,7 +70,7 @@ label {
 .sidenav a {
 	padding: 8px 8px 8px 32px;
 	text-decoration: none;
-	font-size: 25px;
+	font-size: 20px;
 	color: #818181;
 	display: block;
 	transition: 0.3s;
@@ -86,7 +86,7 @@ label {
 	position: absolute;
 	top: 0;
 	right: 25px;
-	font-size: 36px;
+	font-size: 30px;
 	margin-left: 50px;
 }
 
@@ -106,6 +106,6 @@ label {
 	border: none;
 	color: white;
 	padding: 15px 32px;
-	font-size: 16px;
+	font-size: 12px;
 	border-radius: 2px;
 }

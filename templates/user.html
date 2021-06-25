@@ -138,17 +138,28 @@
        userHeader.append(`<th colspan="3">@${$('#username').val()}</th>`);
        userTable.append(userHeader);
 
-       const header = $('<tr>');
-       header.append(`<th>ID</th>`);
-       header.append(`<th>Username</th>`);
-       header.append(`<th>Profile Picture</th>`);
-       userTable.append(header);
+        const header = $('<tr>');
+        // sort keys
+        const keys = Object.keys(user).sort();
+        keys.forEach(key => header.append(`<th>${key}</th>`));
+        userTable.append(header);
 
-      const row = $(`<tr id=${user.id}>`);
-      row.append(`<td id='id'>${user.id}</td>`);
-      row.append(`<td id='username'>${user.username}</td>`);
-      row.append(`<td id='icon'><img src="${user.icon}"/></td>`);
-      userTable.append(row);
+        const bodyRow = $(`<tr id=${user.id}>`);
+        keys.forEach(key => {
+          let value = `${user[key]}`;
+          try {
+            const extension = user[key].split('.').pop();
+            switch (extension.toLowerCase()) {
+              case 'jpg': 
+                value = `<img src="${user[key]}"/>`;
+              
+            }
+          } catch(err) { 
+            console.warn(err);
+          }
+          bodyRow.append(`<td id=${key}>${value}</td>`);
+        });
+        userTable.append(bodyRow);
 
        $('#export-button').show();
        $('#clear-button').show();

@@ -142,18 +142,37 @@
        userHeader.append(`<th colspan="2">@${$('#username').val()}</th>`);
        tweetTable.append(userHeader);
 
-       const header = $('<tr>');
-       header.append(`<th>ID</th>`);
-       header.append(`<th>Tweet</th>`);
-       tweetTable.append(header);
+       // if tweets are found then create table 
+       if (tweets.length > 0) { 
+          const header = $('<tr>');
+          // sort keys
+          const keys = Object.keys(tweets[0]).sort();
+          keys.forEach(key => header.append(`<th>${key}</th>`));
+          tweetTable.append(header);
 
-       for (let i = 0; i < tweets.length; i++) {
-          const tweet = tweets[i];
-          const row = $(`<tr id=${tweet.id}>`);
-          row.append(`<td id='id'>${tweet.id}</td>`);
-          row.append(`<td id='content'>${tweet.content}</td>`);
-          tweetTable.append(row);
-       }
+          const extractExtension = (fname) => {
+            return fname.slice((fname.lastIndexOf(".") - 1 >>> 0) + 2);
+          };
+
+          tweets.forEach(tweet => {
+              const bodyRow = $(`<tr id=${tweet.id}>`);
+              keys.forEach(key => {
+                let value = `${tweet[key]}`;
+                try {
+                  const extension = extractExtension(tweet[key]);
+                  switch (extension.toLowerCase()) {
+                    case 'jpg': 
+                      value = `<img src="${tweet[key]}"/>`;
+                    
+                  }
+                } catch(err) { 
+                  console.warn(err);
+                }
+                bodyRow.append(`<td id=${key}>${value}</td>`);
+                tweetTable.append(bodyRow);
+              });
+          });
+      }
 
        $('#export-button').show();
        $('#clear-button').show();

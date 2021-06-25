@@ -2,22 +2,14 @@ from flask import json, render_template, Flask, request
 from markupsafe import escape
 from twint import run, Config
 
+
 from lib.file import make_csv_response
 
 def marshal_tweet(tweet):
-	return {
-		'id': tweet.id,
-		'user_id': tweet.user_id,
-		'username': tweet.username,
-		'content': tweet.tweet
-	}
+	return vars(tweet);
 
 def marshal_user(user):
-	return {
-		'id': user.id,
-		'username': user.username,
-		'icon': user.avatar
-	}
+	return vars(user);
 
 batch_size = 20 # twint uses increments of 20
 default_limit = 1 * batch_size 
