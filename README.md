@@ -15,7 +15,7 @@ These filters can be used individually, separated by commas (e.g. `text:words to
 
 ## File Types Supported
 - [X] CSV
-- [ ] JSON
+- [X] JSON
 - [ ] XLSX
 - [ ] PDF
 - [ ] ODF
