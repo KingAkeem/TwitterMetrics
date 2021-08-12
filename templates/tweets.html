@@ -62,6 +62,7 @@
       <input id='export-button' class="action-button" type="button" value="Export Results"/>
       <div class="dropdown-content">
         <a class="action-button" id='csv'>As CSV</a>
+        <a class="action-button" id='json'>As JSON</a>
       </div>
     </div>
     <input id='submit-button' class='action-button' type="submit" value='Submit'/>
@@ -70,59 +71,87 @@
   </div>
  {% endblock %}
 
- {% block scripts %}
+{% block scripts %}
  <script type="module">
-   $('#csv').bind('click', function(event) {
-     const table = $('#table-container').children()[0];
-     if (table) {
-       /**
+  const saveData = (function () {
+      const a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      return function (data, fileName) {
+          const blob = new Blob([data], {type: "octet/stream"});
+          const url = window.URL.createObjectURL(blob);
+          a.href = url;
+          a.download = fileName;
+          a.click();
+          window.URL.revokeObjectURL(url);
+      };
+  }());
+
+  const exportData = (rows, type) => {
+    const username = getUsername();
+    const request = new XMLHttpRequest();
+    request.open('POST', `/export/csv?username=${username}`);
+    const data = new FormData();
+    data.append('rows', JSON.stringify(rows));
+    request.onreadystatechange = function() {
+      if (request.readyState === XMLHttpRequest.DONE) {
+        if (request.status === 0 || (request.status >= 200 && request.status < 400)) {
+          saveData(request.response,`${username}-tweets.csv`)
+        } else {
+          console.error('Unable to process request.', request.responseText);
+        }
+      }
+    }
+    request.send(data);
+  };
+
+  const getRowData = () => {
+    const table = $('#table-container').children()[0];
+    if (table) {
+      /**
         currently sends data back to server once a database has been added, the ID will be sent so the server can retrieve the results
-        **/
-
-        const rows =[];
-        const data = new FormData();
-        const username = table.rows[0].children[0].innerText;
-        for (let i = 0; i < table.rows.length; i++) {
-          const row = table.rows[i];
-          const rowData = {};
-          for (let j = 0; j < row.children.length; j++) {
-              const cell = row.children[j];
-              rowData[cell.id] = cell.innerText;   
-          }
-          rows.push(rowData);
+      **/
+      const rows =[];
+      for (let i = 0; i < table.rows.length; i++) {
+        const row = table.rows[i];
+        const rowData = {};
+        for (let j = 0; j < row.children.length; j++) {
+            const cell = row.children[j];
+            if (cell.id.trim() === "") continue;
+            rowData[cell.id] = cell.innerText;   
         }
+        if (Object.entries(rowData).length === 0) continue;
+        rows.push(rowData);
+      }
+      return rows;
+    }
+  };
 
-        const saveData = (function () {
-            const a = document.createElement("a");
-            document.body.appendChild(a);
-            a.style = "display: none";
-            return function (data, fileName) {
-                const blob = new Blob([data], {type: "octet/stream"});
-                const url = window.URL.createObjectURL(blob);
-                a.href = url;
-                a.download = fileName;
-                a.click();
-                window.URL.revokeObjectURL(url);
-            };
-        }());
+  const getUsername = () => {
+    const table = $('#table-container').children()[0];
+    if (table) {
+      const username = table.rows[0].children[0].innerText;
+      return username; 
+    }
+  };
 
-        const request = new XMLHttpRequest();
-        request.open('POST', `/export/csv?username=${username}`);
-        data.append('fields', JSON.stringify(['id', 'content']));
-        data.append('rows', JSON.stringify(rows));
-        request.onreadystatechange = function() {
-          if (request.readyState === XMLHttpRequest.DONE) {
-            if (request.status === 0 || (request.status >= 200 && request.status < 400)) {
-              saveData(request.response,`${username}.csv`)
-              console.log(request);
-              console.log(request.response)
-            } else {
-              console.error('Unable to process request.', request.responseText);
-            }
-          }
-        }
-        request.send(data);
-     }
+   $('#csv').bind('click', function(event) {
+      const rows = getRowData();
+      exportData(rows, 'csv');
+   });
+
+  const saveJson = (content, fileName, contentType) => {
+    var a = document.createElement("a");
+    var file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+  };
+
+   $('#json').bind('click', function(event) {
+      const rows = getRowData();
+      const username = getUsername();
+      saveJson(JSON.stringify(rows), `${username}-tweets.txt`, 'text/plain');
    });
 
    $('#clear-button').bind('click', function(event) {
@@ -179,4 +208,4 @@
      });
    })
  </script>
- {% endblock %}
+{% endblock %}
