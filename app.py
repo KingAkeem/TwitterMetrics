@@ -54,8 +54,6 @@ def export(file_type):
 	rows = json.loads(request.form.get('rows'))
 
 	fields = rows[0].keys()
-	print('fields are ', fields)
-	print('rows are', rows)
 	if file_type == 'csv':
 		return make_csv_response(username, rows, fields)
 
