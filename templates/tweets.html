@@ -87,7 +87,8 @@
       };
   }());
 
-  const exportData = (rows, type, username) => {
+  const exportData = (rows, type) => {
+    const username = getUsername();
     const request = new XMLHttpRequest();
     request.open('POST', `/export/csv?username=${username}`);
     const data = new FormData();
@@ -95,7 +96,7 @@
     request.onreadystatechange = function() {
       if (request.readyState === XMLHttpRequest.DONE) {
         if (request.status === 0 || (request.status >= 200 && request.status < 400)) {
-          saveData(request.response,`${username}.csv`)
+          saveData(request.response,`${username}-tweets.csv`)
         } else {
           console.error('Unable to process request.', request.responseText);
         }
@@ -136,8 +137,7 @@
 
    $('#csv').bind('click', function(event) {
       const rows = getRowData();
-      const username = getUsername();
-      exportData(rows, 'csv', username);
+      exportData(rows, 'csv');
    });
 
   const saveJson = (content, fileName, contentType) => {
