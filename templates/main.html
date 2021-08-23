@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
-{% block head %}
+{% block export_dropdown_css %}
   {{ super() }}
   <style type="text/css">
     #main-menu-item {
@@ -11,6 +11,9 @@
   </style>
 {% endblock %}
 {% block content %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
   <div class='container'>
     <h1>Twitter Metrics</h1>
     <p>This web page provides access to gathering various types of user data from Twitter.com such as tweets, followers, location, etc.</p>
