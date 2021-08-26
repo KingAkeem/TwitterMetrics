@@ -8,7 +8,10 @@ This project allows users to analyze Twitter OSINT data and build reports using 
 - `keyword` filter returns tweets that contain the given text (e.g. `keyword: word_to_search`)
 - `since` filter returns tweets that have occurred since a certain time period (e.g. `since:2021-11-14`, only `YYYY-mm-dd` date format is accepted)
 - `until` filter returns tweets that have occurred until a certain time period (e.g. `until:2021-11-14`, only `YYYY-mm-dd` date format is accepted)
-- `location` filter returns tweets that were made within a certain location (e.g. `location:56/102`, `lat/lon` respectively)
+
+- `location` filter returns tweets that were made within a certain location (e.g. `location:56/102`, `lat/lon` respectively) (not yet supported)
+
+
 These filters can be used individually, separated by commas (e.g. `keyword:word_to_search,location:56/102`) or not used at all (in which case no data will be filtered and all tweets within the limit will be returned). Tweets can only be searched in increments of `20`.
 
 #### Search User - you can search for a given user's profile and retrieve profile specific information.
