@@ -1,4 +1,5 @@
 import csv
+import os
 from flask import make_response
 
 def create_csv(name, rows, fields):
@@ -17,7 +18,11 @@ def make_csv_response(username, rows, fields):
 	filename = create_csv(username, rows, fields)
 	with open(filename, 'rb') as csv_file:
 		response = make_response(csv_file.read())
-		response.status = 200
-		response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-		response.headers["Content-type"] = "text/csv"
-		return response
+
+	if os.path.exists(filename):
+		os.remove(filename)
+
+	response.status = 200
+	response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+	response.headers["Content-type"] = "text/csv"
+	return response
