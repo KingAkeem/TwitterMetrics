@@ -40,28 +40,28 @@
 
 {% block scripts %}
  <script type="module">
-   $('#csv').bind('click', function(event) {
+    $('#csv').bind('click', function(event) {
       const rows = getRows();
       downloadAsCsv(rows);
-   });
-   $('#json').bind('click', function(event) {
+    });
+    $('#json').bind('click', function(event) {
       const rows = getRows();
       downloadAsJson(rows);
-   });
+    });
 
-   $('#clear-button').bind('click', function(event) {
-       $('#table-container').empty();
-       $('#export-button').hide();
-       $('#clear-button').hide();
-   });
+    $('#clear-button').bind('click', function(event) {
+      $('#table-container').empty();
+      $('#export-button').hide();
+      $('#clear-button').hide();
+    });
 
-   $('#submit-button').bind('click', function(event) {
-     const params = {username: $('#username').val(), limit: $('#limit').val(), filter: $('#filter').val()};
-     $.getJSON($SCRIPT_ROOT + '/search/tweets', params, function(tweets) {
-      insertTweets(tweets);
-      $('#export-button').show();
-      $('#clear-button').show();
-     });
-   });
+    $('#submit-button').bind('click', function(event) {
+      const params = {username: $('#username').val(), limit: $('#limit').val(), filter: $('#filter').val()};
+      $.getJSON($SCRIPT_ROOT + '/search/tweets', params, function(tweets) {
+        insertTweets(tweets);
+        $('#export-button').show();
+        $('#clear-button').show();
+      });
+    });
  </script>
 {% endblock %}

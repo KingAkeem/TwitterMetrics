@@ -59,12 +59,45 @@ function getRows() {
 	}
 }
 
- function getUsername() {
+function getUsername() {
     const table = $('#table-container').children()[0];
     if (table) {
       const username = table.rows[0].children[0].innerText;
       return username; 
     }
+}
+
+function insertUser(user) {
+       const userTable = $("<table class='result-table'>");
+       $('#table-container').empty();
+       $('#table-container').append(userTable);
+
+       const userHeader = $('<tr>');
+       userHeader.append(`<th colspan="3">@${$('#username').val()}</th>`);
+       userTable.append(userHeader);
+
+        const header = $('<tr>');
+        // sort keys
+        const keys = Object.keys(user).sort();
+        keys.forEach(key => header.append(`<th>${key}</th>`));
+        userTable.append(header);
+
+        const bodyRow = $(`<tr id=${user.id}>`);
+        keys.forEach(key => {
+          let value = `${user[key]}`;
+          try {
+            const extension = user[key].split('.').pop();
+            switch (extension.toLowerCase()) {
+              case 'jpg': 
+                value = `<img src="${user[key]}"/>`;
+              
+            }
+          } catch(err) { 
+            console.debug(err);
+          }
+          bodyRow.append(`<td id=${key}>${value}</td>`);
+        });
+        userTable.append(bodyRow);
 }
 
 function insertTweets(tweets) {

@@ -1,4 +1,4 @@
-import twint
+from twint import run, Config
 
 def marshal_tweet(tweet):
 	return vars(tweet)
@@ -29,19 +29,19 @@ default_limit = 1 * batch_size
 def scrape_tweets(username, filter_text, limit = default_limit):
 	tweets = []
 	filter = parse_filter(filter_text)
-	config = twint.Config(
+	config = Config(
 		Limit=int(limit),
 		Username=username,
 		Store_object=True,
 		Store_object_tweets_list=tweets,
 	)
 	add_filter(config, filter)
-	twint.run.Search(config) # run config once filters have been added
+	run.Search(config) # run config once filters have been added
 	return [marshal_tweet(tweet) for tweet in tweets]
 
 def scrape_user(username):
 	users = []
-	twint.run.Lookup(twint.Config(
+	run.Lookup(Config(
 		Username=username,
 		Store_object=True,
 		Store_object_users_list=users
