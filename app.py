@@ -1,59 +1,15 @@
 from flask import json, render_template, Flask, request 
+from flask_assets import Environment, Bundle
 from markupsafe import escape
-from twint import run, Config
 
 
 from lib.file import make_csv_response
-
-def marshal_tweet(tweet):
-	return vars(tweet)
-
-def marshal_user(user):
-	return vars(user)
-
-def parse_filter(filter_text):
-	filter = dict()
-	for segment in filter_text.split(','):
-		pieces = segment.split(':')
-		if len(pieces) == 2:
-			key, value = pieces
-			filter[key] = value.strip() 	
-	return filter
-
-def add_filter(config, filter):
-	for key, value in filter.items():
-		if key == 'keyword':
-			config.Search = value
-		elif key == 'since':
-			config.Since = value
-		elif key == 'until':
-			config.Until = value
-
-batch_size = 20 # twint uses increments of 20
-default_limit = 1 * batch_size 
-def grab_tweets(username, filter_text, limit = default_limit):
-	tweets = []
-	filter = parse_filter(filter_text)
-	config = Config(
-		Limit=int(limit),
-		Username=username,
-		Store_object=True,
-		Store_object_tweets_list=tweets,
-	)
-	add_filter(config, filter)
-	run.Search(config) # run config once filters have been added
-	return [marshal_tweet(tweet) for tweet in tweets]
-
-def grab_user(username):
-	users = []
-	run.Lookup(Config(
-		Username=username,
-		Store_object=True,
-		Store_object_users_list=users
-	))
-	return marshal_user(user=users.pop())
+from lib.twitter import scrape_tweets, scrape_user
 
 app = Flask(__name__)
+assets = Environment(app) 
+js = Bundle('js/main.js', output='gen/entry.js')
+assets.register('js_all', js)
 
 @app.route("/")
 def main():
@@ -81,11 +37,11 @@ def get_tweets():
 	username = escape(request.args.get('username', '', type=str))
 	limit = escape(request.args.get('limit', '', type=str))
 	filter = escape(request.args.get('filter', '', type=str))
-	tweets = grab_tweets(username=username, limit=limit, filter_text=filter)
+	tweets = scrape_tweets(username=username, limit=limit, filter_text=filter)
 	return json.jsonify(tweets)
 
 @app.route("/search/user")
 def get_user():
 	username = escape(request.args.get('username', '', type=str))
-	users = grab_user(username=username)
+	users = scrape_user(username=username)
 	return json.jsonify(users)
